@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 import About from "./components/landingComponents/About"
-import LandingPage from "./pages/landingPage"
+import LandingPage from "./pages/LandingPage"
 import FeaturedTrips from "./components/landingComponents/FeaturedTrips"
 import Contact from "./pages/Contact"
 
