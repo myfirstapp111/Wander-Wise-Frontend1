@@ -13,10 +13,13 @@ import {
 
 import { ArrowUpRight, Calendar, MapPin, Luggage } from "lucide-react";
 
+import Loading from "@/components/common/Loading";
+
+
 const BaggagePage = () => {
   const { data, loading, error } = useApi("/trips");
 
-  if (loading) return <div className="p-10 text-center">Loading...</div>;
+  if (loading) return <Loading text="Loading trips..." />;
   if (error) return <div className="p-10 text-center text-red-600">Failed to load trips</div>;
 
   const formatDate = (date) =>

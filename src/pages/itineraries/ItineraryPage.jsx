@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import useApi from "@/hooks/useApi";
 import { motion } from "framer-motion";
 
+import Loading from "@/components/common/Loading";
+
 import {
   Card,
   CardContent,
@@ -16,7 +18,7 @@ import { ArrowUpRight, Calendar, MapPin, Luggage } from "lucide-react";
 const ItineraryPage = () => {
   const { data, loading, error } = useApi("/trips");
 
-  if (loading) return <div className="p-10 text-center">Loading...</div>;
+  if (loading) return <Loading text="Loading itineraries..." />;
   if (error) return <div className="p-10 text-center text-red-600">Failed to load trips</div>;
 
   const formatDate = (date) =>

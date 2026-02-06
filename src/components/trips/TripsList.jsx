@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button"
 
 import { AnimatePresence } from "framer-motion"
 
+import Loading from "../common/Loading"
+
 export default function TripsList() {
   const [trips, setTrips] = useState([])
   const [loading, setLoading] = useState(true)
@@ -48,7 +50,7 @@ export default function TripsList() {
     navigate(`/trips/edit/${trip._id}`)
   }
 
-  if (loading) return <div>Loading...</div>
+  if (loading) return <Loading text="Loading trips..." />
 
   return (
     <div className="p-6">
