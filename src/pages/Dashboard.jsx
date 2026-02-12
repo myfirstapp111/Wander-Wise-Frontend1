@@ -1,14 +1,13 @@
-import { Button } from '@/components/ui/button'
-import { StatCard } from '@/components/common/StatCard'
-import { MapPin, Clock, CheckCircle, Compass, Plus } from 'lucide-react'
-import useApi from '@/hooks/useApi'
-import Loading from '@/components/common/Loading';
+import { Button } from "@/components/ui/button";
+import { StatCard } from "@/components/common/StatCard";
+import { MapPin, Clock, CheckCircle, Compass, Plus } from "lucide-react";
+import useApi from "@/hooks/useApi";
+import Loading from "@/components/common/Loading";
 
 export default function Dashboard() {
+  const { data: trips = [], loading } = useApi("/trips");
 
-  const {data:trips, loading, error} = useApi("/trips");
-
-  if(loading) return <Loading text='Fetching trips'/>
+  if (loading) return <Loading text="Fetching trips" />;
 
   const today = new Date();
 
@@ -16,86 +15,90 @@ export default function Dashboard() {
   let upcoming = 0;
   let completed = 0;
 
-  trips.forEach(trip => {
+  trips.forEach((trip) => {
     const startDate = new Date(trip.startDate);
     const endDate = new Date(trip.endDate);
 
-    if (startDate <= today && endDate >= today) {
-      ongoing++;
-    } else if (startDate > today) {
-      upcoming++;
-    } else if (endDate < today) {
-      completed++;
-    }
+    if (startDate <= today && endDate >= today) ongoing++;
+    else if (startDate > today) upcoming++;
+    else completed++;
   });
 
   return (
-    <main className="min-h-screen">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200 py-8 px-20">
-          <h1 className="text-3xl font-bold text-gray-900">Trip Dashboard</h1>
-          <p className="text-gray-600 mt-2">Manage and track all your upcoming and completed trips</p>
+    <main className="min-h-screen bg-indigo-300">
+      {/* ===== HEADER ===== */}
+      <div className="bg-indigo-300 border-b border-gray-200 py-6 px-4 sm:px-8 lg:px-20">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+          Trip Dashboard
+        </h1>
+        <p className="text-sm sm:text-base text-gray-600 mt-2">
+          Manage and track all your upcoming and completed trips
+        </p>
       </div>
 
-      {/* Stats Section */}
-      <div className="py-8 px-20">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <StatCard 
-            label="Total Trips" 
+      {/* ===== CONTENT ===== */}
+      <div className="py-6 sm:py-8 px-4 sm:px-8 lg:px-20">
+        {/* ===== STATS ===== */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
+          <StatCard
+            label="Total Trips"
             value={trips.length}
-            icon={<Compass />}
+            icon={<Compass className="w-5 h-5 sm:w-6 sm:h-6 text-orange-600" />}
             className="bg-orange-50 border-orange-200"
           />
-          <StatCard 
-            label="Upcoming Trips" 
+          <StatCard
+            label="Upcoming Trips"
             value={upcoming}
-            icon={<Clock />}
+            icon={<Clock className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />}
             className="bg-blue-50 border-blue-200"
           />
-          <StatCard 
-            label="Completed Trips" 
+          <StatCard
+            label="Completed Trips"
             value={completed}
-            icon={<CheckCircle />}
+            icon={<CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 text-green-600" />}
             className="bg-green-50 border-green-200"
           />
-          <StatCard 
-            label="Ongoing Trips" 
+          <StatCard
+            label="Ongoing Trips"
             value={ongoing}
-            icon={<MapPin />}
+            icon={<MapPin className="w-5 h-5 sm:w-6 sm:h-6 text-purple-600" />}
             className="bg-purple-50 border-purple-200"
           />
         </div>
 
-        {/* Info Section with Background Image */}
-        <div 
-          className="relative rounded-lg overflow-hidden h-64 md:h-80 lg:h-96 bg-cover bg-center"
+        {/* ===== CTA SECTION ===== */}
+        <div
+          className="relative rounded-xl overflow-hidden h-56 sm:h-72 lg:h-96 bg-cover bg-center"
           style={{
-            backgroundImage: 'url(https://plus.unsplash.com/premium_photo-1672116453000-c31b150f48ef?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)',
+            backgroundImage:
+              "url(https://plus.unsplash.com/premium_photo-1672116453000-c31b150f48ef?q=80&w=1170&auto=format&fit=crop)",
           }}
         >
-          {/* Dim overlay */}
-          <div className="absolute inset-0 bg-black/50"></div>
-          
+          {/* Overlay */}
+          <div className="absolute inset-0 bg-black/50" />
+
           {/* Content */}
-          <div className="relative h-full flex flex-col items-center justify-center text-center px-6">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+          <div className="relative h-full flex flex-col items-center justify-center text-center px-4 sm:px-6">
+            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-3 sm:mb-4">
               Ready for your next adventure?
             </h2>
-            <p className="text-lg text-slate-100 mb-8 max-w-2xl">
+            <p className="text-sm sm:text-lg text-slate-100 mb-6 max-w-xl">
               Plan and book your next trip with ease
             </p>
+
             <a href="/trips/add">
-            <Button 
-              size="lg"
-              className="bg-primary hover:bg-primary/70 text-white font-semibold px-8 py-3 rounded-lg flex items-center gap-2"
-            >
-              <Plus className="w-5 h-5" />
-              Create Trip
-            </Button>
+              <Button
+                size="lg"
+                className="bg-primary hover:bg-primary/80 text-white font-semibold
+                px-6 sm:px-8 py-2 sm:py-3 rounded-lg flex items-center gap-2"
+              >
+                <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
+                Create Trip
+              </Button>
             </a>
           </div>
         </div>
       </div>
     </main>
-  )
+  );
 }

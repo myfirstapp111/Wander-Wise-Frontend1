@@ -13,6 +13,7 @@ import {
   Circle,
   Luggage,
 } from "lucide-react";
+import Loading from "@/components/common/Loading";
 
 const BaggageDetails = () => {
   const [type, setType] = useState("add");
@@ -43,7 +44,7 @@ const BaggageDetails = () => {
       toast.success(
         res.data.completed ? "Marked as completed" : "Marked as not completed"
       );
-    } catch (err) {
+    } catch {
       toast.error("Failed to update baggage status");
     }
   };
@@ -56,25 +57,33 @@ const BaggageDetails = () => {
       await api.delete(`/${id}/baggages/${itemId}`);
       setBaggages((prev) => prev.filter((b) => b._id !== itemId));
       toast.success("Baggage deleted");
-    } catch (err) {
+    } catch {
       toast.error("Failed to delete baggage");
     }
   };
 
-  if (loading) return <div className="p-6">Loading...</div>;
-  if (error) return <div className="p-6 text-red-500">Failed to load baggage</div>;
+  if (loading) return <Loading text="Loading baggage..." />;
+
+  if (error)
+    return (
+      <div className="min-h-screen flex items-center justify-center px-4 text-red-500 text-sm sm:text-base">
+        Failed to load baggage
+      </div>
+    );
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="p-6 mx-auto bg-indigo-300"
+      className="min-h-screen bg-indigo-300 px-4 sm:px-8 lg:px-20 py-6 sm:py-10"
     >
-      {/* Header */}
-      <div className="flex justify-between items-center mb-6">
+      {/* ===== Header ===== */}
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
         <div className="flex items-center gap-3">
-          <Luggage className="w-8 h-8 text-blue-600" />
-          <h1 className="text-3xl font-bold">Baggage List</h1>
+          <Luggage className="w-6 h-6 sm:w-8 sm:h-8 text-blue-600" />
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">
+            Baggage List
+          </h1>
         </div>
 
         <button
@@ -83,17 +92,21 @@ const BaggageDetails = () => {
             setSelectedBaggage(null);
             setOpen(true);
           }}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow transition"
+          className="flex items-center justify-center gap-2 
+          px-4 sm:px-5 py-2 sm:py-3 
+          text-sm sm:text-base 
+          bg-blue-600 hover:bg-blue-700 
+          text-white rounded-lg shadow transition"
         >
-          <Plus size={18} />
+          <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
           Add Baggage
         </button>
       </div>
 
-      {/* List */}
-      <div className="space-y-3">
+      {/* ===== List ===== */}
+      <div className="space-y-3 sm:space-y-4">
         {baggages.length === 0 ? (
-          <div className="text-gray-500 text-center py-10">
+          <div className="text-gray-500 text-center py-10 text-sm sm:text-base">
             No baggage items yet.
           </div>
         ) : (
@@ -106,21 +119,22 @@ const BaggageDetails = () => {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.2 }}
-                className="p-4 border rounded-xl bg-white shadow-sm hover:shadow-md transition flex items-center justify-between"
+                className="p-4 sm:p-5 border rounded-xl bg-white shadow-sm hover:shadow-md transition 
+                flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
               >
                 {/* Left */}
                 <div
-                  className="flex items-center gap-4 cursor-pointer"
+                  className="flex items-center gap-3 sm:gap-4 cursor-pointer"
                   onClick={() => toggleCompleted(item)}
                 >
                   {item.completed ? (
-                    <CheckCircle2 className="text-green-600" />
+                    <CheckCircle2 className="text-green-600 w-5 h-5 sm:w-6 sm:h-6" />
                   ) : (
-                    <Circle className="text-gray-400" />
+                    <Circle className="text-gray-400 w-5 h-5 sm:w-6 sm:h-6" />
                   )}
 
                   <span
-                    className={`text-lg font-semibold ${
+                    className={`text-base sm:text-lg md:text-xl font-semibold ${
                       item.completed
                         ? "line-through text-gray-400"
                         : "text-gray-800"
@@ -131,25 +145,25 @@ const BaggageDetails = () => {
                 </div>
 
                 {/* Right */}
-                <div className="flex gap-2">
+                <div className="flex gap-2 self-end sm:self-auto">
                   <button
                     onClick={() => {
                       setType("edit");
                       setSelectedBaggage(item);
                       setOpen(true);
                     }}
-                    className="p-2 rounded-lg bg-yellow-100 text-yellow-700 hover:bg-yellow-200 transition"
+                    className="p-2 sm:p-3 rounded-lg bg-yellow-100 text-yellow-700 hover:bg-yellow-200 transition"
                     title="Edit"
                   >
-                    <Edit3 size={18} />
+                    <Edit3 className="w-4 h-4 sm:w-5 sm:h-5" />
                   </button>
 
                   <button
                     onClick={() => deleteBaggage(item._id)}
-                    className="p-2 rounded-lg bg-red-100 text-red-600 hover:bg-red-200 transition"
+                    className="p-2 sm:p-3 rounded-lg bg-red-100 text-red-600 hover:bg-red-200 transition"
                     title="Delete"
                   >
-                    <Trash2 size={18} />
+                    <Trash2 className="w-4 h-4 sm:w-5 sm:h-5" />
                   </button>
                 </div>
               </motion.div>
@@ -158,7 +172,7 @@ const BaggageDetails = () => {
         )}
       </div>
 
-      {/* Dialog */}
+      {/* ===== Dialog ===== */}
       <BaggageDialog
         open={open}
         setOpen={setOpen}

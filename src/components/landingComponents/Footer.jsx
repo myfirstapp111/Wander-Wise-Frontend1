@@ -2,9 +2,9 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-gray-300 px-20 py-16">
+    <footer className="bg-gray-900 text-gray-300 px-6 py-12 md:px-12 md:py-16 lg:px-20">
       
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 text-center sm:text-left">
         
         {/* Brand */}
         <div>
@@ -17,7 +17,7 @@ const Footer = () => {
           </p>
         </div>
 
-        {/* Links */}
+        {/* Quick Links */}
         <div>
           <h3 className="text-xl font-semibold text-white mb-4">
             Quick Links
@@ -51,13 +51,14 @@ const Footer = () => {
           <p className="text-gray-400 mb-4">
             Subscribe to get the latest travel updates.
           </p>
-          <div className="flex">
+
+          <div className="flex flex-col sm:flex-row gap-2">
             <input
               type="email"
               placeholder="Your email"
-              className="w-full px-4 py-2 rounded-l-lg focus:outline-none text-gray-900"
+              className="w-full px-4 py-2 rounded-lg sm:rounded-l-lg sm:rounded-r-none focus:outline-none text-gray-900"
             />
-            <button className="bg-purple-600 px-5 rounded-r-lg text-white hover:bg-purple-500">
+            <button className="bg-purple-600 px-5 py-2 rounded-lg sm:rounded-r-lg sm:rounded-l-none text-white hover:bg-purple-500">
               Subscribe
             </button>
           </div>
@@ -66,7 +67,7 @@ const Footer = () => {
       </div>
 
       {/* Bottom */}
-      <div className="border-t border-gray-700 mt-12 pt-6 text-center text-gray-500">
+      <div className="border-t border-gray-700 mt-12 pt-6 text-center text-gray-500 text-sm">
         © {new Date().getFullYear()} WanderWise. All rights reserved.
       </div>
 

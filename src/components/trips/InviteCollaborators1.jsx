@@ -77,21 +77,21 @@ const InviteCollaborators1 = () => {
     };
 
     return (
-        <Card className="bg-blue-200 shadow-lg rounded-2xl border max-w-md mx-auto">
-            <CardHeader className="flex items-center gap-3 pb-2">
+        <Card className="bg-blue-200 shadow-lg rounded-2xl border w-full max-w-md mx-auto px-2 sm:px-4">
+            <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center gap-2 pb-2">
                 <Users className="text-blue-600" size={24} />
-                <CardTitle className="text-lg font-bold">
+                <CardTitle className="text-base sm:text-lg md:text-xl font-bold">
                     Invite Collaborators
                 </CardTitle>
             </CardHeader>
 
-            <CardDescription className="px-6 pt-2 text-gray-600">
+            <CardDescription className="px-0 sm:px-0 text-gray-600 text-xs sm:text-sm md:text-base">
                 Add collaborators to this trip.
             </CardDescription>
 
-            <CardContent className="px-6 pt-4 pb-6">
+            <CardContent className="px-0 sm:px-0 pt-4 pb-6">
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3 sm:space-y-4">
                         {/* EMAIL FIELDS */}
                         {fields.map((item, index) => (
                             <FormField
@@ -100,13 +100,17 @@ const InviteCollaborators1 = () => {
                                 name={`collaboratorEmails.${index}`}
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel className="flex items-center gap-1">
+                                        <FormLabel className="flex items-center gap-1 text-xs sm:text-sm md:text-base">
                                             <Mail size={16} /> Email {index + 1}
                                         </FormLabel>
 
-                                        <div className="flex gap-2">
-                                            <FormControl>
-                                                <Input {...field} placeholder="alice@example.com" />
+                                        <div className="flex flex-col sm:flex-row gap-2">
+                                            <FormControl className="flex-1">
+                                                <Input
+                                                    {...field}
+                                                    placeholder="alice@example.com"
+                                                    className="text-xs sm:text-sm md:text-base"
+                                                />
                                             </FormControl>
 
                                             {fields.length > 1 && (
@@ -121,18 +125,18 @@ const InviteCollaborators1 = () => {
                                             )}
                                         </div>
 
-                                        <FormMessage />
+                                        <FormMessage className="text-xs sm:text-sm md:text-base" />
                                     </FormItem>
                                 )}
                             />
                         ))}
 
-                        <div className="flex justify-center items-center gap-3">
+                        <div className="flex flex-col sm:flex-row justify-center items-stretch sm:items-center gap-2">
                             {/* ADD EMAIL */}
                             <Button
                                 type="button"
                                 variant="outline"
-                                className="w-1/2 flex gap-2"
+                                className="w-full sm:w-1/2 flex gap-2 justify-center text-xs sm:text-sm md:text-base"
                                 onClick={() => append("")}
                             >
                                 <Plus size={16} /> Add another email
@@ -142,7 +146,7 @@ const InviteCollaborators1 = () => {
                             <Button
                                 type="submit"
                                 disabled={loading}
-                                className="w-1/2 bg-blue-600 hover:bg-blue-700 text-white flex gap-2"
+                                className="w-full sm:w-1/2 bg-blue-600 hover:bg-blue-700 text-white flex justify-center items-center gap-2 text-xs sm:text-sm md:text-base"
                             >
                                 {loading ? (
                                     <>
@@ -156,10 +160,7 @@ const InviteCollaborators1 = () => {
                                     </>
                                 )}
                             </Button>
-
                         </div>
-
-
                     </form>
                 </Form>
             </CardContent>

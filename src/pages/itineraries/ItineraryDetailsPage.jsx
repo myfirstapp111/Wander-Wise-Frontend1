@@ -1,335 +1,211 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import {
-    Plus,
-    Pencil,
-    Calendar,
-    MapPin,
-    Clock,
-    AlertTriangle,
-    AlertTriangleIcon,
-} from "lucide-react";
+import { Plus, Pencil, Calendar, MapPin, Clock, AlertTriangle } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import useApi from "@/hooks/useApi";
 
 import { toast } from "sonner";
 import api from "@/api/axios";
 import { Trash2 } from "lucide-react";
-import { useState } from "react";
 
-
-
-
+import Loading from "@/components/common/Loading";
 
 const cardVariants = {
-    hidden: {
-        opacity: 0,
-        y: 30,
-        scale: 0.98,
-    },
-    visible: (i) => ({
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        transition: {
-            delay: i * 0.05,
-            duration: 0.45,
-            ease: "easeOut",
-        },
-    }),
+  hidden: { opacity: 0, y: 30, scale: 0.98 },
+  visible: (i) => ({
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { delay: i * 0.05, duration: 0.45, ease: "easeOut" },
+  }),
 };
 
-
 const ItinerariesDetailsPage = () => {
+  const [deletingId, setDeletingId] = useState(null);
+  const { id } = useParams();
 
+  const { data: tripData } = useApi(`/trips/${id}`);
+  const { data, loading } = useApi(`/${id}/itineraries`);
 
-    const [deletingId, setDeletingId] = useState(null);
+  if (loading || !tripData) return <Loading text="Loading itineraries..." />;
 
-    const { id } = useParams();
+  const totalDays = Math.ceil((new Date(tripData.endDate) - new Date(tripData.startDate)) / (1000 * 60 * 60 * 24)) + 1;
+  const daysArray = new Array(totalDays).fill(0);
 
-    const { data: tripData } = useApi(`/trips/${id}`);
-    const { data, loading } = useApi(`/${id}/itineraries`);
+  const formatDate = (date) =>
+    new Date(date).toLocaleDateString("en-US", { day: "numeric", month: "short", year: "numeric" });
 
-    if (loading || !tripData) return <div>Loading...</div>;
+  const handleDelete = async (itineraryId) => {
+    const confirmed = await new Promise((resolve) => {
+      const toastId = toast(
+        (t) => (
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+            <span className="text-sm sm:text-base">Are you sure you want to delete this itinerary?</span>
+            <div className="flex gap-2">
+              <Button size="sm" variant="destructive" onClick={() => { toast.dismiss(toastId); resolve(true); }}>Yes</Button>
+              <Button size="sm" variant="outline" onClick={() => { toast.dismiss(toastId); resolve(false); }}>No</Button>
+            </div>
+          </div>
+        ),
+        { duration: Infinity }
+      );
+    });
 
+    if (!confirmed) return;
 
+    try {
+      setDeletingId(itineraryId);
+      await api.delete(`/${id}/itineraries/${itineraryId}`);
+      toast.success("Itinerary deleted successfully!");
+      window.location.reload();
+    } catch (err) {
+      toast.error("Failed to delete itinerary");
+    } finally {
+      setDeletingId(null);
+    }
+  };
 
-    //to calculate total days and create days array and map through it
-    const totalDays =
-        Math.ceil(
-            (new Date(tripData.endDate) - new Date(tripData.startDate)) /
-            (1000 * 60 * 60 * 24)
-        ) + 1;
+  return (
+    <section className="px-4 sm:px-6 md:px-10 lg:px-20 py-8 bg-indigo-300 min-h-screen space-y-6">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900">Your Itineraries</h1>
+          <p className="text-sm sm:text-base text-gray-500 mt-1">Plan each day of your trip beautifully</p>
+        </div>
+        <Link to={`/itineraries/add/${id}`}>
+          <Button className="gap-2 text-sm sm:text-base md:text-base">
+            <Plus size={16} /> Add Itinerary
+          </Button>
+        </Link>
+      </div>
 
-    const daysArray = new Array(totalDays).fill(0);
+      {/* Days */}
+      <div className="space-y-4 sm:space-y-6">
+        {daysArray.map((_, index) => {
+          const dayDate = new Date(tripData.startDate);
+          dayDate.setDate(dayDate.getDate() + index);
+          const formattedDate = dayDate.toISOString().split("T")[0];
+          const currentItinerary = data?.itineraries?.find(it => new Date(it.date).toDateString() === dayDate.toDateString());
 
-
-
-    //to change date format
-    const formatDate = (date) =>
-        new Date(date).toLocaleDateString("en-US", {
-            day: "numeric",
-            month: "short",
-            year: "numeric",
-        });
-
-
-    // delete itinerary with proper confirmation toast
-    const handleDelete = async (itineraryId) => {
-        const confirmed = await new Promise((resolve) => {
-            const toastId = toast(
-                (t) => (
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-                        <span className="text-sm">
-                            Are you sure you want to delete this itinerary?
-                        </span>
-
-                        <div className="flex gap-2">
-                            <Button
-                                size="sm"
-                                variant="destructive"
-                                onClick={() => {
-                                    toast.dismiss(toastId); // ✅ close toast
-                                    resolve(true);
-                                }}
-                            >
-                                Yes
-                            </Button>
-
-                            <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => {
-                                    toast.dismiss(toastId); // ✅ close toast
-                                    resolve(false);
-                                }}
-                            >
-                                No
-                            </Button>
-                        </div>
+          /* EMPTY DAY CARD */
+          if (!currentItinerary) {
+            return (
+              <motion.div
+                key={index}
+                variants={cardVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.25 }}
+                custom={index}
+              >
+                <Card className="border-dashed bg-gray-300 hover:bg-gray-200 transition">
+                  <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 md:gap-4">
+                    <div className="flex items-start gap-2 md:gap-3">
+                      <Calendar className="text-indigo-500 mt-1" size={18} />
+                      <div>
+                        <AlertTriangle className="inline-block mr-2 text-red-500" size={16} />
+                        <CardTitle className="text-base sm:text-lg md:text-xl">Day {index + 1}</CardTitle>
+                        <CardDescription className="text-sm sm:text-base">{formatDate(dayDate)} · No plans yet</CardDescription>
+                      </div>
                     </div>
-                ),
-                { duration: Infinity }
+                    <Link to={`/itineraries/add/${id}?date=${formattedDate}`}>
+                      <Button size="sm" variant="outline" className="gap-2 bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm md:text-base">
+                        <Plus size={14} /> Add Itinerary
+                      </Button>
+                    </Link>
+                  </CardHeader>
+                </Card>
+              </motion.div>
             );
-        });
+          }
 
-        if (!confirmed) return;
+          /* FILLED DAY CARD */
+          return (
+            <motion.div
+              key={index}
+              variants={cardVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.25 }}
+              custom={index}
+            >
+              <Card className="bg-gray-300 hover:bg-gray-200 transition shadow-md">
+                <CardHeader className="space-y-2">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
+                    <div className="flex items-center gap-2 sm:gap-3">
+                      <Calendar className="text-indigo-600" size={18} />
+                      <div>
+                        <CardTitle className="text-lg sm:text-xl md:text-2xl">
+                          Day {index + 1}: {currentItinerary.title}
+                        </CardTitle>
+                        <CardDescription className="text-sm sm:text-base">
+                          {formatDate(currentItinerary.date)}
+                        </CardDescription>
+                      </div>
+                    </div>
 
-        try {
-            setDeletingId(itineraryId);
+                    <div className="flex gap-2 sm:gap-3 mt-2 sm:mt-0">
+                      <Link to={`/itineraries/${id}/edit/${currentItinerary._id}`}>
+                        <Button size="sm" variant="outline" className="gap-2 bg-purple-600 hover:bg-purple-500 text-white text-xs sm:text-sm md:text-base">
+                          <Pencil size={14} /> Edit
+                        </Button>
+                      </Link>
+                      <Button
+                        size="sm"
+                        variant="destructive"
+                        className="gap-2 bg-red-600 hover:bg-red-500 text-white text-xs sm:text-sm md:text-base"
+                        disabled={deletingId === currentItinerary._id}
+                        onClick={() => handleDelete(currentItinerary._id)}
+                      >
+                        <Trash2 size={14} /> Delete
+                      </Button>
+                    </div>
+                  </div>
 
-            await api.delete(`/${id}/itineraries/${itineraryId}`);
+                  <p className="text-sm sm:text-base text-gray-600 mt-1">{currentItinerary.description}</p>
+                </CardHeader>
 
-            toast.success("Itinerary deleted successfully!");
-            window.location.reload();
-        } catch (err) {
-            toast.error("Failed to delete itinerary");
-        } finally {
-            setDeletingId(null);
-        }
-    };
-
-
-
-
-    return (
-        <section className="px-20 py-10 bg-indigo-300">
-            {/* Header */}
-            <div className="flex items-center justify-between mb-8">
-                <div>
-                    <h1 className="text-3xl font-bold text-gray-900">
-                        Your Itineraries
-                    </h1>
-                    <p className="text-gray-500 mt-1">
-                        Plan each day of your trip beautifully
-                    </p>
-                </div>
-
-                <Link to={`/itineraries/add/${id}`}>
-                    <Button className="gap-2">
-                        <Plus size={18} />
-                        Add Itinerary
-                    </Button>
-                </Link>
-            </div>
-
-            {/* Days */}
-            <div className="space-y-6">
-                {daysArray.map((_, index) => {
-                    const dayDate = new Date(tripData.startDate);
-                    dayDate.setDate(dayDate.getDate() + index);
-
-                    const formattedDate = dayDate.toISOString().split("T")[0];
-
-                    const currentItinerary = data?.itineraries?.find((itinerary) => {
-                        return (
-                            new Date(itinerary.date).toDateString() ===
-                            dayDate.toDateString()
-                        );
-                    });
-
-                    /* ---------------- EMPTY DAY CARD ---------------- */
-                    if (!currentItinerary) {
-                        return (
-                            <motion.div
-                                key={index}
-                                variants={cardVariants}
-                                initial="hidden"
-                                whileInView="visible"
-                                viewport={{ once: true, amount: 0.25 }}
-                                custom={index}
-                            >
-                                <Card className="border-dashed transition
-                                hover:bg-gray-200
-                                bg-gray-300">
-                                    <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                                        <div className="flex items-start gap-3">
-                                            <Calendar className="text-indigo-500 mt-1" />
-                                            <div className="">
-
-                                                <AlertTriangleIcon className="inline-block mr-2 text-red-500" />
-                                                <CardTitle className="text-lg">
-
-                                                    Day {index + 1}
-                                                </CardTitle>
-                                                <CardDescription>
-                                                    {formatDate(dayDate)} · No plans yet
-                                                </CardDescription>
-                                            </div>
-                                        </div>
-
-                                        <Link
-                                            to={`/itineraries/add/${id}?date=${formattedDate}`}
-                                        >
-                                            <Button
-                                                size="sm"
-                                                variant="outline"
-                                                className="gap-2 bg-blue-600 hover:bg-blue-500 text-white cursor-pointer"
-                                            >
-                                                <Plus size={16} />
-                                                Add Itinerary
-                                            </Button>
-                                        </Link>
-                                    </CardHeader>
-                                </Card>
-                            </motion.div>
-                        );
-                    }
-
-                    /* ---------------- FILLED DAY CARD ---------------- */
-                    return (
-                        <motion.div
-                            key={index}
-                            variants={cardVariants}
-                            initial="hidden"
-                            whileInView="visible"
-                            viewport={{ once: true, amount: 0.25 }}
-                            custom={index}
-                        >
-                            <Card className="hover:shadow-lg transition bg-gray-300
-                            hover:bg-gray-200 ">
-                                <CardHeader className="space-y-2">
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex items-center gap-3">
-                                            <Calendar className="text-indigo-600" />
-                                            <div>
-                                                <CardTitle className="text-xl">
-                                                    Day {index + 1}: {currentItinerary.title}
-                                                </CardTitle>
-                                                <CardDescription>
-                                                    {formatDate(currentItinerary.date)}
-                                                </CardDescription>
-                                            </div>
-                                        </div>
-
-                                        <Link
-                                            to={`/itineraries/${id}/edit/${currentItinerary._id}`}
-                                        >
-                                            <Button size="sm" variant="outline" className="gap-2 bg-purple-600 hover:bg-purple-500 text-white cursor-pointer">
-                                                <Pencil size={16} />
-                                                Edit
-                                            </Button>
-                                        </Link>
-                                        <Button
-                                            size="sm"
-                                            variant="destructive"
-                                            className="gap-2 bg-red-600 hover:bg-red-500 text-white cursor-pointer"
-                                            disabled={deletingId === currentItinerary._id}
-                                            onClick={() => handleDelete(currentItinerary._id)}
-                                        >
-                                            <Trash2 size={16} />
-                                            Delete
-                                        </Button>
-
-                                    </div>
-
-                                    <p className="text-gray-600">
-                                        {currentItinerary.description}
-                                    </p>
-                                </CardHeader>
-
-                                <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    {currentItinerary.activities?.length > 0 ? (
-                                        currentItinerary.activities.map((activity, idx) => (
-                                            <motion.div
-                                                key={idx}
-                                                whileHover={{ scale: 1.02 }}
-                                                className="border border-b-amber-400 rounded-xl p-4 bg-muted"
-                                            >
-
-                                                <div className="flex items-center gap-2 mb-1">
-                                                    <MapPin size={16} className="text-indigo-500" />
-                                                    <h3 className="font-semibold">
-                                                        {activity.name}
-                                                    </h3>
-                                                </div>
-
-                                                <div className="flex items-center gap-2 text-sm text-gray-600">
-                                                    <Clock size={14} />
-                                                    Time: {activity.time}
-                                                </div>
-
-                                                {activity.notes?.length > 0 && (
-                                                    <ul className="mt-2 list-disc list-inside text-sm text-gray-500">
-                                                        {activity.notes.map((note, i) => (
-                                                            <li key={i}>{note}</li>
-                                                        ))}
-                                                    </ul>
-                                                )}
-                                            </motion.div>
-                                        ))
-                                    ) : (
-
-                                        <div className="mt-4 flex items-center gap-2 text-sm text-gray-600">
-                                            <AlertTriangleIcon
-                                                size={16}
-                                                strokeWidth={2}
-                                                className="text-yellow-500"
-                                            />
-                                            <span>No activities planned</span>
-                                        </div>
-
-                                    )}
-                                </CardContent>
-                            </Card>
-                        </motion.div>
-                    );
-                })}
-            </div>
-        </section>
-    );
+                <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4">
+                  {currentItinerary.activities?.length > 0 ? (
+                    currentItinerary.activities.map((activity, idx) => (
+                      <motion.div key={idx} whileHover={{ scale: 1.02 }} className="border rounded-xl p-3 sm:p-4 bg-muted">
+                        <div className="flex items-center gap-2 mb-1 text-sm sm:text-base md:text-base">
+                          <MapPin size={14} className="text-indigo-500" />
+                          <h3 className="font-semibold">{activity.name}</h3>
+                        </div>
+                        <div className="flex items-center gap-2 text-xs sm:text-sm md:text-sm text-gray-600 mb-1">
+                          <Clock size={12} /> Time: {activity.time}
+                        </div>
+                        {activity.notes?.length > 0 && (
+                          <ul className="list-disc list-inside text-xs sm:text-sm md:text-sm text-gray-500">
+                            {activity.notes.map((note, i) => (
+                              <li key={i}>{note}</li>
+                            ))}
+                          </ul>
+                        )}
+                      </motion.div>
+                    ))
+                  ) : (
+                    <div className="flex items-center gap-2 text-xs sm:text-sm md:text-sm text-gray-600 mt-2">
+                      <AlertTriangle size={14} className="text-yellow-500" /> <span>No activities planned</span>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </motion.div>
+          );
+        })}
+      </div>
+    </section>
+  );
 };
 
 export default ItinerariesDetailsPage;
+
 
 
 

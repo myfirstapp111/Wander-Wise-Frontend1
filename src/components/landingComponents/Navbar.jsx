@@ -1,68 +1,93 @@
-import React from 'react'
-import CustomButton from '../common/CustomButton'
-import Typewriter from 'typewriter-effect'
-import { Link } from 'react-router-dom'
-
-
+import React, { useState } from "react";
+import CustomButton from "../common/CustomButton";
+import Typewriter from "typewriter-effect";
+import { Link } from "react-router-dom";
+import { Menu, X } from "lucide-react";
 
 const Navbar = () => {
-    return (
-        <header className='flex justify-between items-center px-20 py-4 sticky top-0 z-100 bg-sky-300'>
+  const [open, setOpen] = useState(false);
 
-            {/*left navbar*/}
-            <div className='flex items-center gap-4 text-3xl font-bold'>
+  return (
+    <header className="sticky top-0 z-50 bg-sky-300">
+      <div className="flex justify-between items-center px-4 sm:px-6 md:px-20 py-3 sm:py-4">
+        
+        {/* Left */}
+        <div className="flex items-center gap-2 sm:gap-3 font-bold">
+          <img
+            src="/logo.png"
+            alt="WanderWise Logo"
+            className="w-8 h-8 sm:w-10 sm:h-10 rounded-full"
+          />
 
+          {/* Hide typewriter on very small screens */}
+          <div className="
+            hidden sm:block
+            text-lg sm:text-xl md:text-2xl
+          ">
+            <Typewriter
+              options={{
+                strings: ["WanderWise"],
+                autoStart: true,
+                loop: true,
+              }}
+            />
+          </div>
+        </div>
 
-                <img src="/logo.png" alt="WanderWise Logo" className='w-12 h-12 rounded-full' />
-                <Typewriter
-                    options={{
-                        strings: ['WanderWise', 'WanderWise', 'WanderWise'],
-                        autoStart: true,
-                        loop: true,
-                    }}
-                />
+        {/* Desktop Nav */}
+        <div className="hidden md:flex items-center gap-8 lg:gap-10">
+          <nav
+            className="
+              flex items-center gap-4 lg:gap-6
+              [&>a]:text-sm md:[&>a]:text-base lg:[&>a]:text-lg
+              [&>a]:font-medium
+              [&>a]:hover:text-purple-600
+              transition
+            "
+          >
+            <a href="#features">Features</a>
+            <a href="#about">About</a>
+            <a href="#famous">Famous</a>
+            <a href="#contact">Contact</a>
+          </nav>
 
+          <Link to="/login1">
+            <CustomButton texty="Sign In" />
+          </Link>
+        </div>
 
+        {/* Mobile Menu Button */}
+        <button
+          className="md:hidden"
+          onClick={() => setOpen(!open)}
+        >
+          {open ? <X size={26} /> : <Menu size={26} />}
+        </button>
+      </div>
 
+      {/* Mobile Dropdown */}
+      {open && (
+        <div className="md:hidden bg-sky-200 px-6 pb-6 animate-slideDown">
+          <nav className="
+            flex flex-col gap-4
+            text-base sm:text-lg
+            font-medium
+          ">
+            <a onClick={() => setOpen(false)} href="#features">Features</a>
+            <a onClick={() => setOpen(false)} href="#about">About</a>
+            <a onClick={() => setOpen(false)} href="#famous">Famous</a>
+            <a onClick={() => setOpen(false)} href="#contact">Contact</a>
+          </nav>
 
+          <div className="mt-4">
+            <Link to="/login1" onClick={() => setOpen(false)}>
+              <CustomButton texty="Sign In" />
+            </Link>
+          </div>
+        </div>
+      )}
+    </header>
+  );
+};
 
-                {  /*<h2>WanderWise</h2>*/}
-            </div>
-
-
-
-
-
-            {/*right navbar*/}
-            <div className='flex items-center gap-10'>
-
-
-                <nav className='flex items-center gap-6
-            [&>a]:text-lg
-            [&>a]:hover:text-purple-600
-            [&>a]:font-medium
-            
-           '>
-                    <a href="#features">Features</a>
-                    <a href="#about">About</a>
-                    <a href="#famous">Famous</a>
-                    <a href="#contact">Contact</a>
-
-                </nav>
-
-                <div className="auth-buttons">
-                    <Link to="/login1"> <CustomButton texty="SignIn" />
-                    
-                    
-                    </Link>
-
-
-                </div>
-
-
-            </div>
-        </header>
-    )
-}
-
-export default Navbar
+export default Navbar;

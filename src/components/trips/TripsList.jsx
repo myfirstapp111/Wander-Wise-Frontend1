@@ -32,13 +32,13 @@ export default function TripsList() {
   }, [])
 
   // Handle delete
-  const handleDeleteTrip = async (tripId) => {
+  const handleDeleteTrip = async (trip) => {
     if (!window.confirm("Are you sure you want to delete this trip?")) return
 
     try {
-      await api.delete(`/trips/${tripId._id}`)
+      await api.delete(`/trips/${trip._id}`)
       toast.success("Trip deleted successfully")
-      setTrips(trips.filter((t) => t._id !== tripId._id))
+      setTrips(trips.filter((t) => t._id !== trip._id))
     } catch (err) {
       console.error(err)
       toast.error("Failed to delete trip")
@@ -53,29 +53,22 @@ export default function TripsList() {
   if (loading) return <Loading text="Loading trips..." />
 
   return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-4">
-        
-        
-      </div>
-
+    <div className="px-4 sm:px-6 md:px-10 py-4">
       {trips.length === 0 ? (
-        <div>No trips available</div>
+        <div className="text-center text-sm sm:text-base text-gray-700 py-10">
+          No trips available
+        </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-
-
-
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {trips.map((trip) => (
             <TripsCard
               key={trip._id}
               trip={trip}
               onEdit={handleEditTrip}
               onDelete={handleDeleteTrip}
+              className="text-sm sm:text-base" // text size responsive for each card
             />
           ))}
-
-
         </div>
       )}
     </div>

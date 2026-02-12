@@ -25,25 +25,50 @@ const featuredTripsData = [
   },
 ];
 
-
-
-
 const FeaturedTrips = () => {
   return (
-    <section className="px-20 py-20 bg-gray-600">
-
+    <section
+      className="
+        px-5 sm:px-10 lg:px-20
+        py-14 sm:py-16 lg:py-20
+        bg-gray-600
+      "
+    >
       {/* Section Header */}
-      <div className="text-center mb-14">
-        <h2 className="text-4xl font-bold mb-4 text-gray-800">
+      <div className="text-center mb-10 sm:mb-12 lg:mb-14">
+        <h2
+          className="
+            text-2xl sm:text-3xl lg:text-4xl
+            font-bold
+            mb-3 sm:mb-4
+            text-gray-800
+          "
+        >
           Featured Trips
         </h2>
-        <p className="text-gray-600">
+
+        <p
+          className="
+            text-sm sm:text-base lg:text-lg
+            text-gray-600
+            max-w-2xl
+            mx-auto
+          "
+        >
           Handpicked destinations to inspire your next adventure.
         </p>
       </div>
 
       {/* Cards Grid */}
-      <div className="grid grid-cols-3 gap-8">
+      <div
+        className="
+          grid
+          grid-cols-1
+          sm:grid-cols-2
+          lg:grid-cols-3
+          gap-6 sm:gap-7 lg:gap-8
+        "
+      >
         {featuredTripsData.map((trip, index) => (
           <FeaturedTripCard
             key={index}
@@ -53,7 +78,6 @@ const FeaturedTrips = () => {
           />
         ))}
       </div>
-
     </section>
   );
 };

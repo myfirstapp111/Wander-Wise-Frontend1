@@ -1,14 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { useState } from "react";
 import { MoreHorizontalIcon, Calendar, Wallet, Globe, MapPin, FileText, Edit, Trash2, EyeIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
+  DropdownMenuItem,
   DropdownMenuContent,
   DropdownMenuGroup,
-  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -20,28 +19,21 @@ export default function TripsCard({ trip, onEdit, onDelete }) {
   const [showShareDialog, setShowShareDialog] = useState(false);
 
   return (
-
-
     <motion.div
       layout
       initial={{ opacity: 0, y: 100, rotateX: 15 }}
-
       whileInView={{ opacity: 1, y: 0, scale: 1 }}
-      viewport={{ amount: 0.3 }}   // ❗ no "once: true"
+      viewport={{ amount: 0.3 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      //whileHover={{ y: -6, scale: 1.02 }}
-      className="border rounded-xl p-5 shadow-md bg-gray-300
-  hover:scale-105
-  hover:shadow-xl transition"
+      className="border rounded-xl p-4 sm:p-5 shadow-md bg-gray-300
+        hover:scale-105 hover:shadow-xl transition
+        w-full sm:w-auto"
     >
-
-
-
       {/* Header */}
       <div className="flex justify-between items-start">
         <div className="flex items-center gap-2">
-          <MapPin className="text-purple-600" size={22} />
-          <h2 className="text-xl font-bold text-gray-800">{trip.title}</h2>
+          <MapPin className="text-purple-600" size={20} />
+          <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800">{trip.title}</h2>
         </div>
 
         {/* Menu */}
@@ -78,10 +70,9 @@ export default function TripsCard({ trip, onEdit, onDelete }) {
       </div>
 
       {/* Dates + Budget */}
-      <div className="flex flex-wrap gap-3 mt-4 text-sm">
-
-        <div className="flex items-center gap-2 bg-gray-100 px-3 py-1 rounded-full">
-          <Calendar size={16} className="text-blue-600" />
+      <div className="flex flex-wrap gap-2 mt-3 text-xs sm:text-sm md:text-base">
+        <div className="flex items-center gap-1 sm:gap-2 bg-gray-100 px-2 py-1 rounded-full">
+          <Calendar size={14} className="text-blue-600" />
           <span>
             {new Date(trip.startDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}{" "}
             -{" "}
@@ -89,19 +80,18 @@ export default function TripsCard({ trip, onEdit, onDelete }) {
           </span>
         </div>
 
-        <div className="flex items-center gap-2 bg-green-100 px-3 py-1 rounded-full">
-          <Wallet size={16} className="text-green-700" />
-          <span className="font-semibold">₹{trip.budget?.total || 0}</span>
+        <div className="flex items-center gap-1 sm:gap-2 bg-green-100 px-2 py-1 rounded-full">
+          <Wallet size={14} className="text-green-700" />
+          <span className="font-semibold text-xs sm:text-sm">₹{trip.budget?.total || 0}</span>
         </div>
-
       </div>
 
       {/* Description */}
       {trip.description && (
-        <div className="mt-4 bg-gray-50 p-3 rounded-lg text-sm text-gray-700">
-          <div className="flex items-center gap-2 mb-1 text-gray-600">
-            <FileText size={16} />
-            <span className="font-medium">Description</span>
+        <div className="mt-3 bg-gray-50 p-2 sm:p-3 rounded-lg text-xs sm:text-sm md:text-base text-gray-700">
+          <div className="flex items-center gap-1 sm:gap-2 mb-1 text-gray-600 font-medium text-xs sm:text-sm">
+            <FileText size={14} />
+            Description
           </div>
           {trip.description}
         </div>
@@ -109,17 +99,17 @@ export default function TripsCard({ trip, onEdit, onDelete }) {
 
       {/* Destinations */}
       {trip.destinations?.length > 0 && (
-        <div className="mt-4">
-          <div className="flex items-center gap-2 mb-2 text-gray-700 font-medium">
-            <Globe size={16} />
+        <div className="mt-3">
+          <div className="flex items-center gap-1 sm:gap-2 mb-1 text-gray-700 font-medium text-xs sm:text-sm">
+            <Globe size={14} />
             Destinations
           </div>
 
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-1 sm:gap-2">
             {trip.destinations.map((place, i) => (
               <span
                 key={i}
-                className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-xs font-semibold"
+                className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-[10px] sm:text-xs md:text-sm font-semibold"
               >
                 {place}
               </span>
@@ -131,15 +121,11 @@ export default function TripsCard({ trip, onEdit, onDelete }) {
       {/* View Details Button */}
       <Link to={`/trip-details/${trip._id}`}>
         <button className="flex justify-center items-center cursor-pointer
-         bg-purple-600 w-full hover:bg-purple-500 text-white mt-5 py-2 rounded-lg transition">
-          <EyeIcon className="inline mr-2" /> View Details
+          bg-purple-600 w-full hover:bg-purple-500 text-white mt-4 py-2 rounded-lg text-xs sm:text-sm md:text-base transition"
+        >
+          <EyeIcon className="inline mr-2 w-4 h-4 sm:w-5 sm:h-5" /> View Details
         </button>
       </Link>
-
-
     </motion.div>
-
-
   );
-
 }

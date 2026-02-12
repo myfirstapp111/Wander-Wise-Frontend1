@@ -2,45 +2,36 @@ import TripsForm from '@/components/trips/TripsForm'
 import React from 'react'
 
 import {
-    Card,
-    CardAction,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
+  Card,
+  CardContent,
+  CardHeader,
 } from "@/components/ui/card"
 
 const AddTripsPage = () => {
+  return (
+    <div className="min-h-screen bg-indigo-300 flex items-start md:items-center justify-center px-4 py-6">
+      
+      {/* Responsive container */}
+      <section className="w-full sm:w-11/12 md:w-3/4 lg:w-2/5">
+        
+        <Card className="bg-white shadow-lg rounded-xl">
+          <CardHeader className="text-center">
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-800">
+              Create New Trip
+            </h2>
+            <p className="text-sm text-gray-500 mt-1">
+              Fill in the details to plan your next adventure
+            </p>
+          </CardHeader>
 
+          <CardContent className="px-4 sm:px-6">
+            <TripsForm tripsInfo={null} />
+          </CardContent>
+        </Card>
 
-
-    return (
-        <div className='bg-gray-300'>AddTripsPage
-            <section className='w-2/5 mx-auto my-3 '>
-
-
-                <Card className="bg-blue-300">
-                    <CardHeader>
-                        <CardTitle></CardTitle>
-                        <CardDescription></CardDescription>
-                        <CardAction></CardAction>
-                    </CardHeader>
-                    <CardContent>
-                        <TripsForm tripsInfo={null} />
-                    </CardContent>
-                    <CardFooter>
-                        <p></p>
-                    </CardFooter>
-                </Card>
-
-
-
-                
-            </section>
-
-        </div>
-    )
+      </section>
+    </div>
+  )
 }
 
 export default AddTripsPage

@@ -34,10 +34,7 @@ const AddExpense = ({ trip, onAdded }) => {
       setAmount("");
       setDate("");
 
-      // Tell parent to refresh trip data
-      
-
-      // ✅ THIS REFRESHES TripDetailsPage
+      // Refresh parent
       onAdded?.();
 
     } catch (err) {
@@ -48,33 +45,34 @@ const AddExpense = ({ trip, onAdded }) => {
   };
 
   return (
-    <Card className="bg-blue-200 border border-blue-300 shadow-lg">
+    <Card className="bg-blue-200 border border-blue-300 shadow-lg w-full sm:w-full md:w-auto">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
+        <CardTitle className="flex items-center gap-2 text-sm sm:text-base md:text-lg">
           <Wallet className="text-blue-700" />
           Add Expense
         </CardTitle>
-        <CardDescription>
+        <CardDescription className="text-xs sm:text-sm md:text-base">
           Record a new expense for this trip
         </CardDescription>
       </CardHeader>
 
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-3 sm:space-y-4">
         {/* Expense Name */}
         <div>
-          <label className="text-sm font-medium flex items-center gap-1 mb-1">
+          <label className="text-xs sm:text-sm md:text-base font-medium flex items-center gap-1 mb-1">
             <Wallet size={16} /> Expense Name
           </label>
           <Input
             placeholder="Hotel, Food, Taxi..."
             value={name}
             onChange={(e) => setName(e.target.value)}
+            className="text-xs sm:text-sm md:text-base"
           />
         </div>
 
         {/* Amount */}
         <div>
-          <label className="text-sm font-medium flex items-center gap-1 mb-1">
+          <label className="text-xs sm:text-sm md:text-base font-medium flex items-center gap-1 mb-1">
             <IndianRupee size={16} /> Amount
           </label>
           <Input
@@ -82,18 +80,20 @@ const AddExpense = ({ trip, onAdded }) => {
             placeholder="1000"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
+            className="text-xs sm:text-sm md:text-base"
           />
         </div>
 
         {/* Date */}
         <div>
-          <label className="text-sm font-medium flex items-center gap-1 mb-1">
+          <label className="text-xs sm:text-sm md:text-base font-medium flex items-center gap-1 mb-1">
             <Calendar size={16} /> Date (optional)
           </label>
           <Input
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
+            className="text-xs sm:text-sm md:text-base"
           />
         </div>
 
@@ -101,17 +101,17 @@ const AddExpense = ({ trip, onAdded }) => {
         <Button
           onClick={handleSubmit}
           disabled={loading}
-          className="w-full bg-blue-600 hover:bg-blue-700"
+          className="w-full bg-blue-600 hover:bg-blue-700 text-xs sm:text-sm md:text-base flex justify-center items-center gap-2"
         >
-           {loading ? (
-                <>
-                  <Loader2 className="animate-spin h-4 w-4" /> Adding...
-                </>
-              ) : (
-                <>
-                  <LayersPlus size={16} /> Add Expense
-                </>
-              )}
+          {loading ? (
+            <>
+              <Loader2 className="animate-spin h-4 w-4" /> Adding...
+            </>
+          ) : (
+            <>
+              <LayersPlus size={16} /> Add Expense
+            </>
+          )}
         </Button>
       </CardContent>
     </Card>

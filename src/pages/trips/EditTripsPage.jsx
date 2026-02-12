@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom"
 import TripsForm from "@/components/trips/TripsForm"
 import api from "@/api/axios"
 
+import Loading from "@/components/common/Loading"
+
 import {
     Card,
     CardAction,
@@ -34,34 +36,30 @@ const EditTripsPage = () => {
     fetchTrip()
   }, [id])
 
-  if (loading) return <div>Loading...</div>
-  if (!tripsInfo) return <div>Trip not found</div>
+  if (loading) return <Loading text="Loading trip details..." />
+  if (!tripsInfo) return <div className="text-center text-gray-700 py-10">Trip not found</div>
 
   return (
-  <div className='bg-gray-300'>AddTripsPage
-              <section className='w-2/5 mx-auto my-3 '>
-  
-  
-                  <Card className="bg-blue-300">
-                      <CardHeader>
-                          <CardTitle></CardTitle>
-                          <CardDescription></CardDescription>
-                          <CardAction></CardAction>
-                      </CardHeader>
-                      <CardContent>
-                          <TripsForm tripsInfo={tripsInfo} />
-                      </CardContent>
-                      <CardFooter>
-                          <p></p>
-                      </CardFooter>
-                  </Card>
-  
-  
-  
-                  
-              </section>
-  
-          </div>
+    <div className="bg-gray-300 min-h-screen py-4">
+      <section className="mx-auto my-3 w-full sm:w-3/4 md:w-2/5 px-3">
+        <Card className="bg-blue-300">
+          <CardHeader>
+            <CardTitle className="text-sm sm:text-base md:text-lg">Edit Trip</CardTitle>
+            <CardDescription className="text-xs sm:text-sm md:text-base">
+              Update your trip details below
+            </CardDescription>
+          </CardHeader>
+
+          <CardContent>
+            <TripsForm tripsInfo={tripsInfo} />
+          </CardContent>
+
+          <CardFooter>
+            <p className="text-xs sm:text-sm md:text-base text-gray-700">Make sure all information is correct before saving.</p>
+          </CardFooter>
+        </Card>
+      </section>
+    </div>
   )
 }
 

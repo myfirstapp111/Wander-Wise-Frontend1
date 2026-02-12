@@ -1,62 +1,117 @@
-import React from 'react'
-
-import Typewriter from 'typewriter-effect'
+import React from "react";
+import Typewriter from "typewriter-effect";
 
 const Footer1 = () => {
-    return (
-        <footer className='flex items-center justify-between px-20 py-20 bg-gray-400'>
+  return (
+    <footer className="bg-gray-400 px-6 py-12 md:px-12 lg:px-20">
+      <div className="max-w-7xl mx-auto flex flex-col gap-12 lg:flex-row lg:items-start lg:justify-between">
 
-            {/*left side*/}
-            <div>
+        {/* LEFT SIDE */}
+        <div className="flex flex-col gap-6 text-center lg:text-left">
 
-                <div className='mb-10'>
-                    <div className='text-3xl font-bold mb-2'>
-
-
-                        <Typewriter
-                            options={{
-                                strings: ['WanderWise', 'WanderWise', 'WanderWise'],
-                                autoStart: true,
-                                loop: true,
-                            }}
-                        />
-
-
-                    </div>
-                    <p className='text-xl text-gray-700'>WanderWise is a travel platform that helps you plan your perfect trip.</p>
-                </div>
-
-                <div className='text-lg'>
-                    <h2>Clove I.T. Private Limited</h2>
-                    <h2>Mahendra Chowk, Biratnagar, Nepal</h2>
-                    <h2>+977-9800000001</h2>
-                </div>
-
-
-                <p>&copy; {new Date().getFullYear()} WanderWise. All rights reserved.</p>
+          {/* Brand */}
+          <div>
+            <div className="
+              font-bold mb-2
+              text-2xl sm:text-3xl md:text-4xl
+            ">
+              <Typewriter
+                options={{
+                  strings: ["WanderWise"],
+                  autoStart: true,
+                  loop: true,
+                }}
+              />
             </div>
 
+            <p className="
+              text-sm sm:text-base md:text-lg
+              text-gray-700 max-w-md mx-auto lg:mx-0
+            ">
+              WanderWise is a travel platform that helps you plan your perfect trip.
+            </p>
+          </div>
 
-            {/*right side*/}
-            <div className='flex items-center gap-20'>
-                <div className='flex flex-col gap-2 text-lg font-medium text-gray-700'>
-                    <h2 className='text-black text-xl'>Features</h2>
-                    <a className='hover:underline hover:text-purple-600' href="@">Your Trips</a>
-                    <a className='hover:underline hover:text-purple-600' href="@">Itineraries</a>
-                    <a className='hover:underline hover:text-purple-600' href="@">Packages List</a>
-                    <a className='hover:underline hover:text-purple-600' href="@">Collaborate</a>
-                </div>
-                <div className='flex flex-col gap-2 text-lg font-medium text-gray-700'>
-                    <h2 className='text-black text-xl'>Useful Links</h2>
-                    <a className='hover:underline hover:text-purple-600' href="@">About Us</a>
-                    <a className='hover:underline hover:text-purple-600' href="@">Contact Us</a>
-                    <a className='hover:underline hover:text-purple-600' href="@">Privacy Policy</a>
-                    <a className='hover:underline hover:text-purple-600' href="@">Terms & Conditions</a>
-                </div>
-            </div>
+          {/* Company Info */}
+          <div className="
+            text-sm sm:text-base md:text-lg
+            text-gray-800 space-y-1
+          ">
+            <p>Clove I.T. Private Limited</p>
+            <p>Mahendra Chowk, Biratnagar, Nepal</p>
+            <p>+977-9800000001</p>
+          </div>
 
-        </footer>
-    )
-}
+          {/* Copyright */}
+          <p className="
+            text-xs sm:text-sm md:text-base
+            text-gray-700
+          ">
+            &copy; {new Date().getFullYear()} WanderWise. All rights reserved.
+          </p>
+        </div>
 
-export default Footer1
+        {/* RIGHT SIDE */}
+        <div className="flex flex-col sm:flex-row gap-10 sm:gap-20 text-center sm:text-left">
+
+          {/* Features */}
+          <div className="
+            flex flex-col gap-2
+            text-sm sm:text-base md:text-lg
+            font-medium text-gray-700
+          ">
+            <h2 className="
+              text-base sm:text-lg md:text-xl
+              text-black mb-2
+            ">
+              Features
+            </h2>
+
+            <a className="hover:underline hover:text-purple-600" href="#">
+              Your Trips
+            </a>
+            <a className="hover:underline hover:text-purple-600" href="#">
+              Itineraries
+            </a>
+            <a className="hover:underline hover:text-purple-600" href="#">
+              Packages List
+            </a>
+            <a className="hover:underline hover:text-purple-600" href="#">
+              Collaborate
+            </a>
+          </div>
+
+          {/* Useful Links */}
+          <div className="
+            flex flex-col gap-2
+            text-sm sm:text-base md:text-lg
+            font-medium text-gray-700
+          ">
+            <h2 className="
+              text-base sm:text-lg md:text-xl
+              text-black mb-2
+            ">
+              Useful Links
+            </h2>
+
+            <a className="hover:underline hover:text-purple-600" href="#">
+              About Us
+            </a>
+            <a className="hover:underline hover:text-purple-600" href="#">
+              Contact Us
+            </a>
+            <a className="hover:underline hover:text-purple-600" href="#">
+              Privacy Policy
+            </a>
+            <a className="hover:underline hover:text-purple-600" href="#">
+              Terms & Conditions
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer1;

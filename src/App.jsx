@@ -91,18 +91,22 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LandingPage />} />
+
+
+{/* 
         <Route path="/about" element={<About />} />
         <Route path="/famous" element={<FeaturedTrips />} />
-        <Route path="/services" element={<Contact />} />
+        <Route path="/services" element={<Contact />} /> */}
+
 
         <Route path="/register1" element={<Register />} />
         <Route path="/login1" element={<Login />} />
 
 
-
+{/* 
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} /> */}
 
 
         <Route element={<ProtectedRoute />}>
